@@ -1,17 +1,15 @@
 class ApplicationController < ActionController::Base
-  
-  helper :all
   protect_from_forgery
+
+  helper :all
   
   protected
   
   # OAUTH
   
   def oauth_consumer(service)
-    
     if service == "myspace"
-      
-      @oauth_consumer ||= OAuth::Consumer.new(config[service]['key'], config[service]['secret'], :site => config[service]['base_url'],
+      @oauth_consumer ||= OAuth::Consumer.new(auth_config[service]['key'], auth_config[service]['secret'], :site => auth_config[service]['base_url'],
         :http_method => "get",
         :request_token_path => "/request_token",
         :access_token_path => "/access_token",
@@ -19,34 +17,28 @@ class ApplicationController < ActionController::Base
       )
       
     elsif service == "digg"
-      
-      @oauth_consumer ||= OAuth::Consumer.new(config[service]['key'], config[service]['secret'], :site => config[service]['base_url'],
+      @oauth_consumer ||= OAuth::Consumer.new(auth_config[service]['key'], auth_config[service]['secret'], :site => auth_config[service]['base_url'],
         :request_token_url => "http://services.digg.com/oauth/request_token",
         :access_token_url => "http://services.digg.com/oauth/access_token"
       )
       
     else
-   
-      @oauth_consumer ||= OAuth::Consumer.new(config[service]['key'], config[service]['secret'], :site => config[service]['base_url'])
-      
+      @oauth_consumer ||= OAuth::Consumer.new(auth_config[service]['key'], auth_config[service]['secret'], :site => auth_config[service]['base_url'])
     end
-      
   end
   
   def oauth_token(service)
-    
     if service == "soundcloud"
       @oauth_token ||= OAuth::AccessToken.new(oauth_consumer(service), Settings.token, Settings.secret)
     else
       @oauth_token ||= OAuth::AccessToken.new(oauth_consumer(service), session[:user][:token], session[:user][:secret])
     end
-    
   end
   
   # OAUTH 2
   
   def oauth2_client
-    @oauth2_client ||= OAuth2::Client.new(config['facebook']['app_id'], config['facebook']['secret'], :site => config['facebook']['base_url'])
+    @oauth2_client ||= OAuth2::Client.new(auth_config['facebook']['app_id'], auth_config['facebook']['secret'], :site => auth_config['facebook']['base_url'])
   end
   
   def oauth2_token
@@ -55,8 +47,7 @@ class ApplicationController < ActionController::Base
   
   # CONFIG
   
-  def config
-    config = YAML.load(File.open(RAILS_ROOT + '/config/auth.yml').read)[RAILS_ENV]
+  def auth_config
+    @auth_config = YAML.load(File.open(File.join(Rails.root, 'config', 'auth.yml')).read)[Rails.env]
   end
-  
 end

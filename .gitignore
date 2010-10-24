@@ -1,5 +1,6 @@
-.DS_Store
+.bundle
+db/*.sqlite3
 log/*.log
 tmp/**/*
-db/*.sqlite3
+.DS_Store
 public/stylesheets/.sass-cache/**/*

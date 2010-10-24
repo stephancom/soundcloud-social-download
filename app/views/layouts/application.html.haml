@@ -14,7 +14,7 @@
 		
 		= stylesheet_link_tag 'application'
 		= javascript_include_tag 'jquery', 'facebox', 'application'
-		
+		= csrf_meta_tag
 	%body
 	
 		- if flash[:notice]
@@ -24,3 +24,4 @@
 			%p#error= flash[:error] 
 		
 		= yield
+    

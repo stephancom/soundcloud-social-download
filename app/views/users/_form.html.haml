@@ -1,6 +1,6 @@
 %div#user{:style => "display:none"}
 
-	- form_for User.new do |f|
+	= form_for User.new do |f|
 	
 		= f.hidden_field :service, :value => "email"
 
