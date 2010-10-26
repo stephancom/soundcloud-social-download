@@ -1,6 +1,6 @@
 %div#player
 
-	- if SETTINGS["public"]
+	- if SETTINGS["public"] && !is_ios?
 
 		%object{:height => SETTINGS["player"]["height"], :width => SETTINGS["player"]["width"]}
 			%param{:name => 'bgcolor', :value => '000000'}
